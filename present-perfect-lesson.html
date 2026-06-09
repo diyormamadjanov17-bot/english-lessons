@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Present Perfect Tense — Interactive Lesson</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1a2744;
+    --blue: #2563eb;
+    --sky: #e0eaff;
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --yellow: #f59e0b;
+    --yellow-light: #fef3c7;
+    --white: #ffffff;
+    --gray: #6b7280;
+    --light: #f8fafc;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --purple-mid: #8b5cf6;
+  }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #1a1235;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    color: var(--text);
+  }
+
+  /* ── TOP NAV ── */
+  #topbar {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 28px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  #topbar .logo { color: #fff; font-weight: 700; font-size: 15px; letter-spacing: 0.03em; }
+  #topbar .logo span { color: #c4b5fd; }
+  #progress-bar { flex: 1; max-width: 300px; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; margin: 0 24px; }
+  #progress-fill { height: 100%; background: #a78bfa; border-radius: 3px; transition: width 0.4s ease; }
+  #slide-counter { color: rgba(255,255,255,0.65); font-size: 13px; min-width: 60px; text-align: right; }
+
+  /* ── SLIDE WRAPPER ── */
+  #stage {
+    width: 100%;
+    max-width: 860px;
+    padding: 32px 20px 100px;
+    flex: 1;
+  }
+
+  .slide { display: none; animation: fadeUp 0.35s ease; }
+  .slide.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CARD BASE ── */
+  .card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  /* ── TITLES ── */
+  .eyebrow {
+    display: inline-block;
+    background: var(--purple-light);
+    color: var(--purple);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .slide-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .slide-subtitle {
+    font-size: 16px;
+    color: var(--gray);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  /* ── COVER SLIDE ── */
+  #slide-0 .card {
+    background: linear-gradient(135deg, #3b1f8a 0%, #1a1235 100%);
+    text-align: center;
+    padding: 60px 40px;
+  }
+  #slide-0 .slide-title { color: #fff; font-size: 42px; }
+  #slide-0 .slide-subtitle { color: #c4b5fd; font-size: 18px; margin-bottom: 36px; }
+  .big-emoji { font-size: 72px; margin-bottom: 20px; display: block; }
+  .tag-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+  .tag {
+    background: rgba(255,255,255,0.12);
+    color: #ddd6fe;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  /* ── TWO-COL LAYOUT ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width:600px){ .two-col { grid-template-columns: 1fr; } }
+
+  /* ── INFO BOXES ── */
+  .info-box {
+    border-radius: 14px;
+    padding: 20px 22px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .info-box.purple { background: var(--purple-light); border: 1.5px solid #c4b5fd; }
+  .info-box.yellow { background: var(--yellow-light); border: 1.5px solid #fcd34d; }
+  .info-box.green  { background: var(--green-light);  border: 1.5px solid #86efac; }
+  .info-box.red    { background: var(--red-light);    border: 1.5px solid #fca5a5; }
+  .info-box.blue   { background: #eff6ff;             border: 1.5px solid #bfdbfe; }
+  .info-box h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--navy); }
+
+  /* ── FORMULA DISPLAY ── */
+  .formula {
+    background: #1a1235;
+    color: #fff;
+    border-radius: 14px;
+    padding: 20px 28px;
+    font-family: 'Courier New', monospace;
+    font-size: 17px;
+    text-align: center;
+    margin: 18px 0;
+    letter-spacing: 0.02em;
+    line-height: 1.7;
+  }
+  .formula .hl  { color: #a78bfa; font-weight: 700; }
+  .formula .hl2 { color: #fbbf24; }
+
+  /* ── RULE CARDS ── */
+  .rule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+  @media(max-width:600px){ .rule-grid { grid-template-columns: 1fr; } }
+  .rule-card {
+    border-radius: 12px;
+    padding: 16px 18px;
+    border: 1.5px solid var(--border);
+    background: var(--light);
+  }
+  .rule-card .rule-label   { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray); margin-bottom: 6px; }
+  .rule-card .rule-example { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .rule-card .rule-note    { font-size: 13px; color: var(--gray); }
+  .rule-card.highlight     { background: var(--purple-light); border-color: #c4b5fd; }
+
+  /* ── TIMELINE ── */
+  .timeline { display: flex; flex-direction: column; gap: 0; margin-top: 18px; position: relative; }
+  .timeline::before { content:''; position:absolute; left:19px; top:24px; bottom:24px; width:2px; background: var(--border); }
+  .tl-item { display:flex; gap:16px; align-items:flex-start; padding:12px 0; }
+  .tl-dot { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; position:relative; z-index:1; }
+  .tl-dot.purple { background:var(--purple-light); border:2px solid #c4b5fd; }
+  .tl-dot.green  { background:var(--green-light);  border:2px solid #86efac; }
+  .tl-dot.yellow { background:var(--yellow-light); border:2px solid #fcd34d; }
+  .tl-dot.red    { background:var(--red-light);    border:2px solid #fca5a5; }
+  .tl-body { padding-top:8px; }
+  .tl-body strong { display:block; font-size:15px; color:var(--navy); margin-bottom:3px; }
+  .tl-body span   { font-size:13px; color:var(--gray); }
+
+  /* ── VS BOX ── */
+  .vs-grid { display:grid; grid-template-columns:1fr auto 1fr; gap:12px; align-items:center; margin-top:20px; }
+  .vs-label { background:#f1f5f9; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; color:var(--gray); justify-self:center; }
+  .vs-card { border-radius:14px; padding:18px; border:1.5px solid var(--border); }
+  .vs-card h4 { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:10px; }
+  .vs-card.pp { background:var(--purple-light); border-color:#c4b5fd; }
+  .vs-card.pp h4 { color:var(--purple); }
+  .vs-card.ps { background:#eff6ff; border-color:#bfdbfe; }
+  .vs-card.ps h4 { color:var(--blue); }
+  .vs-card ul { padding-left:18px; font-size:14px; line-height:1.7; color:var(--text); }
+
+  /* ── EXAMPLE SENTENCES ── */
+  .sentence-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .sentence-list li {
+    background: var(--light);
+    border-radius: 10px;
+    padding: 13px 18px;
+    font-size: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border: 1px solid var(--border);
+  }
+  .sentence-list .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:6px; }
+  .dot.pos { background: var(--green); }
+  .dot.neg { background: var(--red); }
+  .dot.q   { background: var(--yellow); }
+
+  /* ── QUIZ ── */
+  .quiz-q { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 20px; line-height: 1.4; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt-btn {
+    background: var(--light);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  .opt-btn:hover:not(:disabled) { background: var(--purple-light); border-color: #c4b5fd; }
+  .opt-btn.correct { background: var(--green-light); border-color: var(--green); color: #15803d; font-weight: 600; }
+  .opt-btn.wrong   { background: var(--red-light);   border-color: var(--red);   color: var(--red); }
+  .opt-btn:disabled { cursor: default; }
+  .feedback-box {
+    margin-top: 16px; padding: 14px 18px; border-radius: 12px;
+    font-size: 15px; font-weight: 600; display: none;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.ok  { background: var(--green-light); color: #15803d; }
+  .feedback-box.err { background: var(--red-light);   color: var(--red); }
+
+  /* ── FILL-IN ── */
+  .fill-row { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .fill-item {
+    background: var(--light); border-radius: 12px; padding: 14px 18px;
+    font-size: 15px; border: 1px solid var(--border);
+    display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+  }
+  .fill-item input {
+    border: 2px solid #c4b5fd; border-radius: 8px; padding: 4px 10px;
+    font-size: 15px; font-family: inherit; width: 150px; outline: none;
+    color: var(--navy); transition: border 0.15s;
+  }
+  .fill-item input:focus { border-color: var(--purple); }
+  .fill-item input.correct { border-color: var(--green); background: var(--green-light); }
+  .fill-item input.wrong   { border-color: var(--red);   background: var(--red-light); }
+  .fill-hint { font-size: 12px; color: var(--gray); margin-left: 4px; }
+
+  /* ── WORD ORDER ── */
+  .words-pool {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+    min-height: 46px; padding: 10px;
+    background: var(--light); border-radius: 12px; border: 1.5px dashed var(--border);
+  }
+  .word-chip {
+    background: #1a1235; color: #fff; border-radius: 8px;
+    padding: 6px 14px; font-size: 14px; cursor: pointer;
+    transition: transform 0.1s; user-select: none;
+  }
+  .word-chip:hover { transform: scale(1.05); }
+  .word-chip.used { background: var(--border); color: var(--gray); cursor: default; pointer-events: none; }
+  .sentence-slots {
+    display: flex; flex-wrap: wrap; gap: 8px; min-height: 46px; padding: 10px;
+    background: var(--purple-light); border-radius: 12px;
+    border: 1.5px dashed #c4b5fd; align-items: center;
+  }
+  .slot-chip {
+    background: var(--purple); color: #fff; border-radius: 8px;
+    padding: 6px 14px; font-size: 14px; cursor: pointer; user-select: none;
+  }
+  .slot-chip:hover { background: #6d28d9; }
+
+  /* ── SUMMARY ── */
+  .summary-card {
+    background: linear-gradient(135deg, #3b1f8a 0%, #1a1235 100%);
+    color: #fff; border-radius: 20px; padding: 40px;
+    text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  }
+  .summary-card h2 { font-size: 34px; margin-bottom: 10px; }
+  .summary-card p  { color: #c4b5fd; font-size: 16px; margin-bottom: 28px; }
+  .score-circle {
+    width: 110px; height: 110px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); border: 4px solid #a78bfa;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    margin: 0 auto 28px;
+  }
+  .score-circle .num { font-size: 36px; font-weight: 800; color: #fff; }
+  .score-circle .lbl { font-size: 12px; color: #c4b5fd; }
+  .recap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; }
+  .recap-pill {
+    background: rgba(255,255,255,0.1); border-radius: 12px; padding: 14px;
+    font-size: 14px; border: 1px solid rgba(255,255,255,0.15);
+    color: #e9d5ff; text-align: left;
+  }
+  .recap-pill strong { display: block; color: #fff; font-size: 15px; margin-bottom: 4px; }
+
+  /* ── NAV ── */
+  #nav {
+    position: fixed; bottom: 0; width: 100%;
+    background: rgba(26,18,53,0.95); backdrop-filter: blur(10px);
+    display: flex; justify-content: center; gap: 12px;
+    padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 99;
+  }
+  .nav-btn {
+    padding: 10px 28px; border-radius: 10px; border: none;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: all 0.18s;
+  }
+  .nav-btn.prev { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-btn.prev:hover { background: rgba(255,255,255,0.18); }
+  .nav-btn.next { background: var(--purple); color: #fff; }
+  .nav-btn.next:hover { background: #6d28d9; transform: translateY(-1px); }
+  .nav-btn:disabled { opacity: 0.35; cursor: default; transform: none; }
+
+  /* ── ACTION BUTTONS ── */
+  .action-btn {
+    margin-top: 18px; padding: 11px 26px; border-radius: 10px; border: none;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: all 0.18s;
+  }
+  .action-btn.primary   { background: var(--purple); color: #fff; }
+  .action-btn.primary:hover { background: #6d28d9; }
+  .action-btn.secondary { background: var(--light); color: var(--navy); border: 1.5px solid var(--border); margin-left: 8px; }
+  .action-btn.secondary:hover { background: var(--border); }
+
+  .mt16 { margin-top: 16px; }
+  .divider { height: 1px; background: var(--border); margin: 22px 0; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="logo">Present <span>Perfect</span> Tense</div>
+  <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
+  <div id="slide-counter">1 / 9</div>
+</div>
+
+<div id="stage">
+
+  <!-- ═══ SLIDE 0 — COVER ═══ -->
+  <div class="slide active" id="slide-0">
+    <div class="card">
+      <span class="big-emoji">⏳</span>
+      <div class="slide-title">Present Perfect Tense</div>
+      <div class="slide-subtitle">Connecting the past to the present — an interactive lesson<br>Work through the slides, answer activities, and earn your score!</div>
+      <div class="tag-row">
+        <span class="tag">✏️ Theory</span>
+        <span class="tag">💡 Examples</span>
+        <span class="tag">⚖️ PP vs PS</span>
+        <span class="tag">🎯 Quiz</span>
+        <span class="tag">🔤 Fill-in</span>
+        <span class="tag">🏆 Score</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 1 — WHAT IS IT? ═══ -->
+  <div class="slide" id="slide-1">
+    <div class="card">
+      <span class="eyebrow">Lesson 1 — Overview</span>
+      <div class="slide-title">What is the Present Perfect?</div>
+      <div class="slide-subtitle">It links a past action to the present moment — we care about the <em>result</em>, not the exact time.</div>
+      <div class="two-col">
+        <div class="info-box purple">
+          <h3>✅ Life experience</h3>
+          I <strong>have visited</strong> Japan.<br>
+          She <strong>has never tried</strong> sushi.
+        </div>
+        <div class="info-box yellow">
+          <h3>🔗 Result in the present</h3>
+          He <strong>has lost</strong> his keys. (he can't find them now)<br>
+          It <strong>has stopped</strong> raining.
+        </div>
+        <div class="info-box green">
+          <h3>🕐 Unfinished time period</h3>
+          I <strong>have studied</strong> a lot today.<br>
+          We <strong>haven't eaten</strong> this week.
+        </div>
+        <div class="info-box red">
+          <h3>📌 Signal words</h3>
+          ever, never, already, yet, just,<br>recently, so far, this week / year
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 2 — FORMULA ═══ -->
+  <div class="slide" id="slide-2">
+    <div class="card">
+      <span class="eyebrow">Lesson 2 — Structure</span>
+      <div class="slide-title">How to Build the Sentence</div>
+      <div class="slide-subtitle">Always use <strong>have / has</strong> + the <strong>past participle</strong> (3rd form) of the verb.</div>
+
+      <div class="formula">
+        <div>✅ <span class="hl">Subject</span> + <span class="hl2">have / has</span> + <span class="hl">past participle</span></div>
+        <div style="color:#94a3b8;font-size:13px;margin-top:4px;">I <span style="color:#fbbf24">have seen</span> that film. &nbsp;|&nbsp; She <span style="color:#fbbf24">has eaten</span> breakfast.</div>
+      </div>
+      <div class="formula">
+        <div>❌ <span class="hl">Subject</span> + <span class="hl2">have / has not</span> + <span class="hl">past participle</span></div>
+        <div style="color:#94a3b8;font-size:13px;margin-top:4px;">I <span style="color:#fbbf24">haven't seen</span> it. &nbsp;|&nbsp; She <span style="color:#fbbf24">hasn't eaten</span>.</div>
+      </div>
+      <div class="formula">
+        <div>❓ <span class="hl2">Have / Has</span> + <span class="hl">Subject</span> + <span class="hl">past participle</span>?</div>
+        <div style="color:#94a3b8;font-size:13px;margin-top:4px;"><span style="color:#fbbf24">Have</span> you seen it? &nbsp;|&nbsp; <span style="color:#fbbf24">Has</span> she eaten?</div>
+      </div>
+
+      <div class="rule-grid">
+        <div class="rule-card highlight">
+          <div class="rule-label">I / you / we / they → have</div>
+          <div class="rule-example">I have finished. / Have you finished?</div>
+          <div class="rule-note">Short form: I've, you've, we've, they've</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-label">he / she / it → has</div>
+          <div class="rule-example">She has arrived. / Has he arrived?</div>
+          <div class="rule-note">Short form: he's, she's, it's + past participle</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 3 — PAST PARTICIPLE ═══ -->
+  <div class="slide" id="slide-3">
+    <div class="card">
+      <span class="eyebrow">Lesson 3 — Past Participle</span>
+      <div class="slide-title">Regular &amp; Irregular Verbs</div>
+      <div class="slide-subtitle">The past participle (3rd form) is crucial — regular verbs add <strong>-ed</strong>, irregulars must be memorised.</div>
+      <div class="rule-grid">
+        <div class="rule-card highlight">
+          <div class="rule-label">Regular → add -ed</div>
+          <div class="rule-example">work → worked</div>
+          <div class="rule-note">visit → visited &nbsp;|&nbsp; finish → finished</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-label">Irregular — common ones</div>
+          <div class="rule-example">go → gone &nbsp;|&nbsp; see → seen</div>
+          <div class="rule-note">eat → eaten &nbsp;|&nbsp; write → written</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-label">More irregulars</div>
+          <div class="rule-example">make → made &nbsp;|&nbsp; take → taken</div>
+          <div class="rule-note">buy → bought &nbsp;|&nbsp; have → had</div>
+        </div>
+        <div class="rule-card highlight">
+          <div class="rule-label">Same in all forms</div>
+          <div class="rule-example">put → put &nbsp;|&nbsp; cut → cut</div>
+          <div class="rule-note">read → read (pronounced "red")</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <ul class="sentence-list">
+        <li><span class="dot pos"></span>I <strong>have written</strong> three emails today.</li>
+        <li><span class="dot pos"></span>They <strong>have bought</strong> a new car.</li>
+        <li><span class="dot neg"></span>She <strong>hasn't made</strong> a decision yet.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 4 — SIGNAL WORDS ═══ -->
+  <div class="slide" id="slide-4">
+    <div class="card">
+      <span class="eyebrow">Lesson 4 — Signal Words</span>
+      <div class="slide-title">Key Words &amp; Where They Go</div>
+      <div class="slide-subtitle">Certain adverbs always appear with Present Perfect — learn their position in the sentence.</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot purple">✅</div>
+          <div class="tl-body">
+            <strong>already — before the past participle</strong>
+            <span>I have <em>already</em> finished my homework. (sooner than expected)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot yellow">⚠️</div>
+          <div class="tl-body">
+            <strong>yet — at the end (negatives &amp; questions)</strong>
+            <span>Have you eaten <em>yet</em>? &nbsp;|&nbsp; She hasn't called <em>yet</em>.</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot green">⚡</div>
+          <div class="tl-body">
+            <strong>just — before the past participle</strong>
+            <span>He has <em>just</em> arrived. (very recently)</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot purple">🌍</div>
+          <div class="tl-body">
+            <strong>ever / never — before the past participle</strong>
+            <span>Have you <em>ever</em> tried skydiving? &nbsp;|&nbsp; I've <em>never</em> been to Spain.</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot red">📅</div>
+          <div class="tl-body">
+            <strong>for / since — time duration / starting point</strong>
+            <span>I've lived here <em>for</em> 5 years. &nbsp;|&nbsp; She's worked there <em>since</em> 2019.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 5 — PP vs PAST SIMPLE ═══ -->
+  <div class="slide" id="slide-5">
+    <div class="card">
+      <span class="eyebrow">Lesson 5 — Common Confusion</span>
+      <div class="slide-title">Present Perfect vs Past Simple</div>
+      <div class="slide-subtitle">This is the trickiest part. The difference is whether the time is mentioned or matters.</div>
+      <div class="vs-grid">
+        <div class="vs-card pp">
+          <h4>✅ Present Perfect</h4>
+          <ul>
+            <li>No specific time given</li>
+            <li>Result matters now</li>
+            <li>Life experience</li>
+            <li>With: ever, never, already, yet, just</li>
+          </ul>
+          <div style="margin-top:12px;font-size:14px;font-weight:700;color:#5b21b6;">
+            "I <u>have lost</u> my phone."<br>
+            "She <u>has read</u> that book."
+          </div>
+        </div>
+        <div class="vs-label">VS</div>
+        <div class="vs-card ps">
+          <h4>🕰️ Past Simple</h4>
+          <ul>
+            <li>Specific time stated</li>
+            <li>Finished, closed action</li>
+            <li>Story / sequence of events</li>
+            <li>With: yesterday, last week, in 2010, ago</li>
+          </ul>
+          <div style="margin-top:12px;font-size:14px;font-weight:700;color:#1d4ed8;">
+            "I <u>lost</u> my phone yesterday."<br>
+            "She <u>read</u> it last year."
+          </div>
+        </div>
+      </div>
+      <div class="info-box blue" style="margin-top:18px;">
+        <h3>💡 Quick Rule</h3>
+        If you can answer "When exactly?" → use <strong>Past Simple</strong>.<br>
+        If the exact time doesn't matter or isn't known → use <strong>Present Perfect</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 6 — QUIZ ═══ -->
+  <div class="slide" id="slide-6">
+    <div class="card">
+      <span class="eyebrow">Activity 1 — Quiz</span>
+      <div class="slide-title">Choose the Correct Answer</div>
+      <div class="slide-subtitle">Click an option. You get one attempt per question.</div>
+      <div id="quiz-container"></div>
+      <div style="margin-top:20px;font-size:14px;color:var(--gray);">
+        Quiz score: <span id="quiz-score-display" style="font-weight:700;color:var(--navy);">0 / 5</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 7 — FILL IN ═══ -->
+  <div class="slide" id="slide-7">
+    <div class="card">
+      <span class="eyebrow">Activity 2 — Fill in the Blanks</span>
+      <div class="slide-title">Complete the Sentences</div>
+      <div class="slide-subtitle">Type the correct Present Perfect form of the verb in brackets.</div>
+      <div class="fill-row" id="fill-container"></div>
+      <div>
+        <button class="action-btn primary" onclick="checkFill()">Check answers</button>
+        <button class="action-btn secondary" onclick="resetFill()">Reset</button>
+      </div>
+      <div class="feedback-box" id="fill-feedback"></div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 8 — WORD ORDER ═══ -->
+  <div class="slide" id="slide-8">
+    <div class="card">
+      <span class="eyebrow">Activity 3 — Word Order</span>
+      <div class="slide-title">Build the Sentence</div>
+      <div class="slide-subtitle">Click the words in the correct order to form the sentence.</div>
+      <div id="sort-container"></div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 9 — SUMMARY ═══ -->
+  <div class="slide" id="slide-9">
+    <div class="summary-card">
+      <div style="font-size:56px;margin-bottom:12px;">🏆</div>
+      <h2>Excellent work!</h2>
+      <p>You've completed the Present Perfect lesson.</p>
+      <div class="score-circle">
+        <div class="num" id="final-score">0</div>
+        <div class="lbl">points</div>
+      </div>
+      <div class="recap-grid">
+        <div class="recap-pill"><strong>⏳ Use it for:</strong>experiences, results, unfinished time</div>
+        <div class="recap-pill"><strong>➕ Formula:</strong>have / has + past participle</div>
+        <div class="recap-pill"><strong>➖ Negative:</strong>haven't / hasn't + past participle</div>
+        <div class="recap-pill"><strong>❓ Question:</strong>Have/Has + subject + past participle?</div>
+        <div class="recap-pill"><strong>📌 Key words:</strong>ever, never, just, already, yet, since, for</div>
+        <div class="recap-pill"><strong>⚖️ vs Past Simple:</strong>no time = PP | specific time = PS</div>
+      </div>
+      <button class="action-btn primary" style="margin-top:28px;" onclick="restartLesson()">🔁 Start Again</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="nav">
+  <button class="nav-btn prev" id="btn-prev" onclick="changeSlide(-1)" disabled>← Back</button>
+  <button class="nav-btn next" id="btn-next" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+const TOTAL = 10;
+let current = 0;
+let quizScore = 0;
+let fillScore = 0;
+let sortScore = 0;
+let quizAnswered = [false,false,false,false,false];
+
+// ─── QUIZ DATA ─────────────────────────────────────────────────
+const quizData = [
+  {
+    q: "I _____ never been to Australia.",
+    options: ["have", "has", "had", "am"],
+    correct: 0,
+    exp: "✅ <strong>Have</strong> — subject is I, and 'never' signals Present Perfect."
+  },
+  {
+    q: "She _____ already finished her report.",
+    options: ["have", "is", "has", "did"],
+    correct: 2,
+    exp: "✅ <strong>Has</strong> — she (he/she/it) uses <em>has</em>. 'Already' signals Present Perfect."
+  },
+  {
+    q: "We haven't decided _____ .",
+    options: ["already", "ever", "yet", "since"],
+    correct: 2,
+    exp: "✅ <strong>Yet</strong> — in negatives and questions, 'yet' goes at the end of the sentence."
+  },
+  {
+    q: "Which sentence is correct?",
+    options: [
+      "I have seen him yesterday.",
+      "I saw him yesterday.",
+      "I have saw him yesterday.",
+      "I seen him yesterday."
+    ],
+    correct: 1,
+    exp: "✅ <strong>'I saw him yesterday'</strong> — 'yesterday' is a specific past time, so we use Past Simple, not Present Perfect."
+  },
+  {
+    q: "They _____ (live) in London for ten years.",
+    options: ["lived", "have lived", "has lived", "are living"],
+    correct: 1,
+    exp: "✅ <strong>Have lived</strong> — 'for ten years' with an ongoing situation uses Present Perfect."
+  }
+];
+
+// ─── FILL-IN DATA ──────────────────────────────────────────────
+const fillData = [
+  { before: "He", verb: "just/arrive", after: "home.", answer: "has just arrived", hint: "(just/arrive)" },
+  { before: "I", verb: "not/see", after: "that film yet.", answer: "haven't seen", hint: "(not/see)" },
+  { before: "", verb: "Have/Has", after: "you ever eaten durian fruit?", answer: "Have", hint: "(Have/Has)" },
+  { before: "She", verb: "work", after: "at this company since 2020.", answer: "has worked", hint: "(work)" },
+  { before: "We", verb: "already/buy", after: "the tickets.", answer: "have already bought", hint: "(already/buy)" },
+];
+
+// ─── SORT DATA ─────────────────────────────────────────────────
+const sortData = [
+  { words: ["she", "Has", "the", "book", "read", "?"], answer: ["Has", "she", "read", "the", "book", "?"] },
+  { words: ["yet", "finished", "haven't", "I", "homework", "my"], answer: ["I", "haven't", "finished", "my", "homework", "yet"] },
+  { words: ["just", "has", "He", "new", "a", "job", "found"], answer: ["He", "has", "just", "found", "a", "new", "job"] },
+];
+let sortCurrent = 0;
+let sortSlots = [];
+let sortPool = [];
+
+// ─── NAVIGATION ────────────────────────────────────────────────
+function changeSlide(dir) {
+  document.getElementById('slide-' + current).classList.remove('active');
+  current += dir;
+  current = Math.max(0, Math.min(TOTAL - 1, current));
+  document.getElementById('slide-' + current).classList.add('active');
+  updateNav();
+  if (current === 9) updateSummary();
+  if (current === 8 && sortCurrent === 0) renderSort(0);
+  window.scrollTo(0, 0);
+}
+
+function updateNav() {
+  document.getElementById('btn-prev').disabled = current === 0;
+  document.getElementById('btn-next').disabled = current === TOTAL - 1;
+  document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + TOTAL;
+  document.getElementById('progress-fill').style.width = ((current / (TOTAL - 1)) * 100) + '%';
+}
+
+function restartLesson() {
+  quizScore = 0; fillScore = 0; sortScore = 0;
+  quizAnswered = [false,false,false,false,false];
+  sortCurrent = 0; sortPool = []; sortSlots = [];
+  buildQuiz(); buildFill(); resetFill();
+  document.getElementById('slide-' + current).classList.remove('active');
+  current = 0;
+  document.getElementById('slide-0').classList.add('active');
+  updateNav();
+}
+
+// ─── QUIZ ──────────────────────────────────────────────────────
+function buildQuiz() {
+  const c = document.getElementById('quiz-container');
+  c.innerHTML = '';
+  quizData.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'margin-bottom:28px;';
+    div.innerHTML = `
+      <div class="quiz-q">${qi+1}. ${q.q}</div>
+      <div class="options" id="opts-${qi}">
+        ${q.options.map((o,oi) => `<button class="opt-btn" onclick="answerQuiz(${qi},${oi})" id="opt-${qi}-${oi}">${o}</button>`).join('')}
+      </div>
+      <div class="feedback-box" id="qfb-${qi}"></div>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function answerQuiz(qi, oi) {
+  if (quizAnswered[qi]) return;
+  quizAnswered[qi] = true;
+  const q = quizData[qi];
+  const fb = document.getElementById('qfb-' + qi);
+  document.querySelectorAll(`#opts-${qi} .opt-btn`).forEach(b => b.disabled = true);
+  if (oi === q.correct) {
+    document.getElementById(`opt-${qi}-${oi}`).classList.add('correct');
+    fb.innerHTML = q.exp;
+    fb.className = 'feedback-box show ok';
+    quizScore++;
+  } else {
+    document.getElementById(`opt-${qi}-${oi}`).classList.add('wrong');
+    document.getElementById(`opt-${qi}-${q.correct}`).classList.add('correct');
+    fb.innerHTML = '❌ Not quite. ' + q.exp;
+    fb.className = 'feedback-box show err';
+  }
+  document.getElementById('quiz-score-display').textContent = quizScore + ' / 5';
+}
+
+// ─── FILL IN ───────────────────────────────────────────────────
+function buildFill() {
+  const c = document.getElementById('fill-container');
+  c.innerHTML = '';
+  fillData.forEach((f, i) => {
+    const div = document.createElement('div');
+    div.className = 'fill-item';
+    div.innerHTML = `
+      ${f.before ? `<span>${f.before}</span>` : ''}
+      <input type="text" id="fill-${i}" placeholder="?" autocomplete="off" autocorrect="off" spellcheck="false">
+      <span class="fill-hint">${f.hint}</span>
+      <span>${f.after}</span>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function checkFill() {
+  fillScore = 0;
+  fillData.forEach((f, i) => {
+    const inp = document.getElementById('fill-' + i);
+    const val = inp.value.trim().toLowerCase();
+    inp.classList.remove('correct','wrong');
+    if (val === f.answer.toLowerCase()) {
+      inp.classList.add('correct');
+      fillScore++;
+    } else {
+      inp.classList.add('wrong');
+    }
+  });
+  const fb = document.getElementById('fill-feedback');
+  fb.className = 'feedback-box show ' + (fillScore === fillData.length ? 'ok' : 'err');
+  fb.innerHTML = fillScore === fillData.length
+    ? `🎉 Perfect! All ${fillData.length} correct!`
+    : `You got ${fillScore} out of ${fillData.length}. Incorrect boxes are highlighted — check your spelling and try again!`;
+}
+
+function resetFill() {
+  fillData.forEach((f, i) => {
+    const inp = document.getElementById('fill-' + i);
+    if (inp) { inp.value = ''; inp.classList.remove('correct','wrong'); }
+  });
+  const fb = document.getElementById('fill-feedback');
+  if (fb) { fb.className = 'feedback-box'; fb.innerHTML = ''; }
+  fillScore = 0;
+}
+
+// ─── WORD ORDER ────────────────────────────────────────────────
+function renderSort(idx) {
+  const c = document.getElementById('sort-container');
+  if (idx >= sortData.length) {
+    c.innerHTML = `<div class="info-box green" style="margin-top:16px;font-size:16px;">🎉 All sentences complete! You earned <strong>${sortScore} / ${sortData.length}</strong> points on this activity.</div>`;
+    return;
+  }
+  const s = sortData[idx];
+  sortPool = [...s.words].sort(() => Math.random() - 0.5);
+  sortSlots = [];
+  c.innerHTML = `
+    <div style="font-size:14px;color:var(--gray);margin-bottom:12px;">Sentence ${idx+1} of ${sortData.length}</div>
+    <p style="font-size:15px;color:var(--navy);margin-bottom:14px;font-weight:600;">Put the words in the correct order:</p>
+    <div style="font-size:13px;color:var(--gray);margin-bottom:6px;">Word bank — click to add:</div>
+    <div class="words-pool" id="pool">
+      ${sortPool.map((w,i) => `<span class="word-chip" id="wc-${i}" onclick="addWord('${w}',${i})">${w}</span>`).join('')}
+    </div>
+    <div style="font-size:13px;color:var(--gray);margin:12px 0 6px;">Your sentence — click a word to remove it:</div>
+    <div class="sentence-slots" id="slots"></div>
+    <div>
+      <button class="action-btn primary" onclick="checkSort(${idx})" style="margin-top:14px;">Check</button>
+      <button class="action-btn secondary" onclick="resetSort(${idx})" style="margin-top:14px;">Reset</button>
+    </div>
+    <div class="feedback-box" id="sort-fb"></div>
+  `;
+}
+
+function addWord(word, chipIdx) {
+  const chip = document.getElementById('wc-' + chipIdx);
+  if (chip.classList.contains('used')) return;
+  chip.classList.add('used');
+  sortSlots.push({ word, chipIdx });
+  renderSlots();
+}
+
+function removeWord(slotIdx) {
+  const removed = sortSlots.splice(slotIdx, 1)[0];
+  const chip = document.getElementById('wc-' + removed.chipIdx);
+  if (chip) chip.classList.remove('used');
+  renderSlots();
+}
+
+function renderSlots() {
+  const container = document.getElementById('slots');
+  container.innerHTML = sortSlots.length === 0
+    ? '<span style="color:var(--gray);font-size:14px;">Click words above to build the sentence...</span>'
+    : sortSlots.map((s,i) => `<span class="slot-chip" onclick="removeWord(${i})">${s.word}</span>`).join('');
+}
+
+function checkSort(idx) {
+  const fb = document.getElementById('sort-fb');
+  const userSentence = sortSlots.map(s => s.word).join(' ');
+  const correct = sortData[idx].answer.join(' ');
+  if (userSentence.toLowerCase() === correct.toLowerCase()) {
+    fb.className = 'feedback-box show ok';
+    fb.innerHTML = '✅ Correct! Well done!';
+    sortScore++;
+    sortCurrent++;
+    setTimeout(() => renderSort(sortCurrent), 1200);
+  } else {
+    fb.className = 'feedback-box show err';
+    fb.innerHTML = `❌ Not quite. Try again!<br><span style="font-size:13px;margin-top:4px;display:block;">Hint: Check where <em>already</em>, <em>just</em>, or <em>yet</em> belongs.</span>`;
+  }
+}
+
+function resetSort(idx) {
+  sortSlots = [];
+  sortPool.forEach((w, i) => {
+    const chip = document.getElementById('wc-' + i);
+    if (chip) chip.classList.remove('used');
+  });
+  renderSlots();
+  const fb = document.getElementById('sort-fb');
+  if (fb) { fb.className = 'feedback-box'; fb.innerHTML = ''; }
+}
+
+// ─── SUMMARY ───────────────────────────────────────────────────
+function updateSummary() {
+  const total = quizScore + fillScore + sortScore;
+  document.getElementById('final-score').textContent = total;
+}
+
+// ─── INIT ──────────────────────────────────────────────────────
+buildQuiz();
+buildFill();
+updateNav();
+</script>
+</body>
+</html>
