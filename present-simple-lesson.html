@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Present Simple Tense — Interactive Lesson</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1a2744;
+    --blue: #2563eb;
+    --sky: #e0eaff;
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --yellow: #f59e0b;
+    --yellow-light: #fef3c7;
+    --white: #ffffff;
+    --gray: #6b7280;
+    --light: #f8fafc;
+    --border: #e2e8f0;
+    --text: #1e293b;
+  }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    color: var(--text);
+  }
+
+  /* ── TOP NAV ── */
+  #topbar {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 28px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  #topbar .logo { color: #fff; font-weight: 700; font-size: 15px; letter-spacing: 0.03em; }
+  #topbar .logo span { color: #93c5fd; }
+  #progress-bar { flex: 1; max-width: 300px; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; margin: 0 24px; }
+  #progress-fill { height: 100%; background: #60a5fa; border-radius: 3px; transition: width 0.4s ease; }
+  #slide-counter { color: rgba(255,255,255,0.65); font-size: 13px; min-width: 60px; text-align: right; }
+
+  /* ── SLIDE WRAPPER ── */
+  #stage {
+    width: 100%;
+    max-width: 860px;
+    padding: 32px 20px 100px;
+    flex: 1;
+  }
+
+  .slide { display: none; animation: fadeUp 0.35s ease; }
+  .slide.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CARD BASE ── */
+  .card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  }
+
+  /* ── TITLES ── */
+  .eyebrow {
+    display: inline-block;
+    background: var(--sky);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .slide-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .slide-subtitle {
+    font-size: 16px;
+    color: var(--gray);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  /* ── COVER SLIDE ── */
+  #slide-0 .card {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1a2744 100%);
+    text-align: center;
+    padding: 60px 40px;
+  }
+  #slide-0 .slide-title { color: #fff; font-size: 42px; }
+  #slide-0 .slide-subtitle { color: #93c5fd; font-size: 18px; margin-bottom: 36px; }
+  .big-emoji { font-size: 72px; margin-bottom: 20px; display: block; }
+  .tag-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+  .tag {
+    background: rgba(255,255,255,0.12);
+    color: #bfdbfe;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  /* ── TWO-COL LAYOUT ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width:600px){ .two-col { grid-template-columns: 1fr; } }
+
+  /* ── INFO BOXES ── */
+  .info-box {
+    border-radius: 14px;
+    padding: 20px 22px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .info-box.blue { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+  .info-box.yellow { background: var(--yellow-light); border: 1.5px solid #fcd34d; }
+  .info-box.green { background: var(--green-light); border: 1.5px solid #86efac; }
+  .info-box.red { background: var(--red-light); border: 1.5px solid #fca5a5; }
+  .info-box h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--navy); }
+
+  /* ── FORMULA DISPLAY ── */
+  .formula {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 14px;
+    padding: 20px 28px;
+    font-family: 'Courier New', monospace;
+    font-size: 17px;
+    text-align: center;
+    margin: 18px 0;
+    letter-spacing: 0.02em;
+    line-height: 1.7;
+  }
+  .formula .hl { color: #60a5fa; font-weight: 700; }
+  .formula .hl2 { color: #fbbf24; }
+
+  /* ── RULE CARDS ── */
+  .rule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+  @media(max-width:600px){ .rule-grid { grid-template-columns: 1fr; } }
+  .rule-card {
+    border-radius: 12px;
+    padding: 16px 18px;
+    border: 1.5px solid var(--border);
+    background: var(--light);
+  }
+  .rule-card .rule-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray); margin-bottom: 6px; }
+  .rule-card .rule-example { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .rule-card .rule-note { font-size: 13px; color: var(--gray); }
+  .rule-card.highlight { background: var(--sky); border-color: #93c5fd; }
+
+  /* ── EXAMPLE SENTENCES ── */
+  .sentence-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .sentence-list li {
+    background: var(--light);
+    border-radius: 10px;
+    padding: 13px 18px;
+    font-size: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border: 1px solid var(--border);
+  }
+  .sentence-list .dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;
+  }
+  .dot.pos { background: var(--green); }
+  .dot.neg { background: var(--red); }
+  .dot.q   { background: var(--yellow); }
+
+  /* ── QUIZ ── */
+  .quiz-q { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 20px; line-height: 1.4; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt-btn {
+    background: var(--light);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  .opt-btn:hover:not(:disabled) { background: var(--sky); border-color: #93c5fd; }
+  .opt-btn.correct { background: var(--green-light); border-color: var(--green); color: #15803d; font-weight: 600; }
+  .opt-btn.wrong   { background: var(--red-light);   border-color: var(--red);   color: var(--red); }
+  .opt-btn:disabled { cursor: default; }
+  .feedback-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    display: none;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.ok  { background: var(--green-light); color: #15803d; }
+  .feedback-box.err { background: var(--red-light);   color: var(--red); }
+
+  /* ── FILL-IN EXERCISE ── */
+  .fill-row { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .fill-item {
+    background: var(--light);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 15px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .fill-item input {
+    border: 2px solid #93c5fd;
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 15px;
+    font-family: inherit;
+    width: 120px;
+    outline: none;
+    color: var(--navy);
+    transition: border 0.15s;
+  }
+  .fill-item input:focus { border-color: var(--blue); }
+  .fill-item input.correct { border-color: var(--green); background: var(--green-light); }
+  .fill-item input.wrong   { border-color: var(--red);   background: var(--red-light); }
+  .fill-hint { font-size: 12px; color: var(--gray); margin-left: 4px; }
+
+  /* ── MATCH EXERCISE ── */
+  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+  @media(max-width:540px){ .match-grid { grid-template-columns: 1fr; } }
+  .match-col { display: flex; flex-direction: column; gap: 8px; }
+  .match-item {
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--light);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .match-item:hover { border-color: #93c5fd; background: var(--sky); }
+  .match-item.selected { border-color: var(--blue); background: var(--sky); font-weight: 600; }
+  .match-item.matched  { border-color: var(--green); background: var(--green-light); color: #15803d; cursor: default; }
+  .match-item.error    { border-color: var(--red);   background: var(--red-light);   color: var(--red); }
+
+  /* ── SORT EXERCISE ── */
+  .words-pool { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; min-height: 46px; padding: 10px; background: var(--light); border-radius: 12px; border: 1.5px dashed var(--border); }
+  .word-chip {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    user-select: none;
+  }
+  .word-chip:hover { transform: scale(1.05); }
+  .word-chip.used { background: var(--border); color: var(--gray); cursor: default; pointer-events: none; }
+  .sentence-slots { display: flex; flex-wrap: wrap; gap: 8px; min-height: 46px; padding: 10px; background: #eff6ff; border-radius: 12px; border: 1.5px dashed #93c5fd; align-items: center; }
+  .slot-chip {
+    background: var(--blue);
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .slot-chip:hover { background: #1d4ed8; }
+
+  /* ── SUMMARY ── */
+  .summary-card {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1a2744 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  }
+  .summary-card h2 { font-size: 34px; margin-bottom: 10px; }
+  .summary-card p  { color: #93c5fd; font-size: 16px; margin-bottom: 28px; }
+  .score-circle {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 4px solid #60a5fa;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin: 0 auto 28px;
+  }
+  .score-circle .num { font-size: 36px; font-weight: 800; color: #fff; }
+  .score-circle .lbl { font-size: 12px; color: #93c5fd; }
+  .recap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; }
+  .recap-pill {
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #e0f2fe;
+    text-align: left;
+  }
+  .recap-pill strong { display: block; color: #fff; font-size: 15px; margin-bottom: 4px; }
+
+  /* ── NAV BUTTONS ── */
+  #nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: rgba(26, 39, 68, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 99;
+  }
+  .nav-btn {
+    padding: 10px 28px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.18s;
+  }
+  .nav-btn.prev { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-btn.prev:hover { background: rgba(255,255,255,0.18); }
+  .nav-btn.next { background: #2563eb; color: #fff; }
+  .nav-btn.next:hover { background: #1d4ed8; transform: translateY(-1px); }
+  .nav-btn:disabled { opacity: 0.35; cursor: default; transform: none; }
+
+  /* ── CHECK / RESET BUTTONS ── */
+  .action-btn {
+    margin-top: 18px;
+    padding: 11px 26px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.18s;
+  }
+  .action-btn.primary { background: var(--blue); color: #fff; }
+  .action-btn.primary:hover { background: #1d4ed8; }
+  .action-btn.secondary { background: var(--light); color: var(--navy); border: 1.5px solid var(--border); margin-left: 8px; }
+  .action-btn.secondary:hover { background: var(--border); }
+
+  /* Misc helpers */
+  .mt16 { margin-top: 16px; }
+  .divider { height: 1px; background: var(--border); margin: 22px 0; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="logo">Present <span>Simple</span> Tense</div>
+  <div id="progress-bar"><div id="progress-fill" style="width:0%"></div></div>
+  <div id="slide-counter">1 / 9</div>
+</div>
+
+<div id="stage">
+
+  <!-- ═══════════════ SLIDE 0 — COVER ═══════════════ -->
+  <div class="slide active" id="slide-0">
+    <div class="card">
+      <span class="big-emoji">📚</span>
+      <div class="slide-title">Present Simple Tense</div>
+      <div class="slide-subtitle">An interactive lesson for English students<br>Click through the slides, answer questions, and earn your score!</div>
+      <div class="tag-row">
+        <span class="tag">✏️ Theory</span>
+        <span class="tag">💡 Examples</span>
+        <span class="tag">🎯 Quiz</span>
+        <span class="tag">🔤 Fill-in</span>
+        <span class="tag">🧩 Matching</span>
+        <span class="tag">🏆 Score</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SLIDE 1 — WHAT IS IT? ═══════════════ -->
+  <div class="slide" id="slide-1">
+    <div class="card">
+      <span class="eyebrow">Lesson 1 — Overview</span>
+      <div class="slide-title">What is the Present Simple?</div>
+      <div class="slide-subtitle">We use this tense for things that are always or usually true.</div>
+      <div class="two-col">
+        <div class="info-box blue">
+          <h3>🌍 Facts &amp; Truths</h3>
+          The sun <strong>rises</strong> in the east.<br>Water <strong>boils</strong> at 100°C.
+        </div>
+        <div class="info-box yellow">
+          <h3>🔄 Habits &amp; Routines</h3>
+          She <strong>goes</strong> to school every day.<br>I <strong>drink</strong> coffee in the morning.
+        </div>
+        <div class="info-box green">
+          <h3>📅 Schedules</h3>
+          The train <strong>leaves</strong> at 9 AM.<br>The shop <strong>opens</strong> at 8.
+        </div>
+        <div class="info-box red">
+          <h3>🕐 Signal Words</h3>
+          always, usually, often, sometimes,<br>never, every day, on Mondays
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SLIDE 2 — FORMULA ═══════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="card">
+      <span class="eyebrow">Lesson 2 — Structure</span>
+      <div class="slide-title">How to Build the Sentence</div>
+      <div class="slide-subtitle">Three forms: positive, negative, and question.</div>
+
+      <div class="formula">
+        <div>✅ <span class="hl">Subject</span> + <span class="hl2">verb (base / +s)</span></div>
+        <div style="color:#94a3b8;font-size:13px;margin-top:4px;">She <span style="color:#fbbf24">plays</span> tennis. &nbsp;|&nbsp; They <span style="color:#fbbf24">play</span> tennis.</div>
+      </div>
+      <div class="formula">
+        <div>❌ <span class="hl">Subject</span> + <span class="hl2">do/does not</span> + verb</div>
+        <div style="color:#94a3b8;font-size:13px;margin-top:4px;">She <span style="color:#fbbf24">doesn't</span> play. &nbsp;|&nbsp; They <span style="color:#fbbf24">don't</span> play.</div>
+      </div>
+      <div class="formula">
+        <div>❓ <span class="hl2">Do/Does</span> + <span class="hl">Subject</span> + verb?</div>
+        <div style="color:#94a3b8;font-size:13px;margin-top:4px;"><span style="color:#fbbf24">Does</span> she play? &nbsp;|&nbsp; <span style="color:#fbbf24">Do</span> they play?</div>
+      </div>
+
+      <div class="rule-grid">
+        <div class="rule-card highlight">
+          <div class="rule-label">he / she / it → +s or +es</div>
+          <div class="rule-example">He reads. She watches. It goes.</div>
+          <div class="rule-note">Use <strong>does</strong> in negatives &amp; questions</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-label">I / you / we / they → base</div>
+          <div class="rule-example">I read. You watch. They go.</div>
+          <div class="rule-note">Use <strong>do</strong> in negatives &amp; questions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SLIDE 3 — SPELLING RULES ═══════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="card">
+      <span class="eyebrow">Lesson 3 — Spelling</span>
+      <div class="slide-title">Spelling Rules for He/She/It</div>
+      <div class="slide-subtitle">Adding <strong>-s</strong> is not always simple — here are the rules.</div>
+      <div class="rule-grid">
+        <div class="rule-card">
+          <div class="rule-label">Most verbs → +s</div>
+          <div class="rule-example">work → works</div>
+          <div class="rule-note">eat → eats, drink → drinks</div>
+        </div>
+        <div class="rule-card highlight">
+          <div class="rule-label">-s/-sh/-ch/-x/-o → +es</div>
+          <div class="rule-example">watch → watches</div>
+          <div class="rule-note">go → goes, fix → fixes, wash → washes</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-label">consonant + y → -ies</div>
+          <div class="rule-example">study → studies</div>
+          <div class="rule-note">fly → flies, try → tries</div>
+        </div>
+        <div class="rule-card highlight">
+          <div class="rule-label">Irregular verbs</div>
+          <div class="rule-example">have → has</div>
+          <div class="rule-note">be → is &nbsp;|&nbsp; do → does</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <ul class="sentence-list">
+        <li><span class="dot pos"></span>She <strong>studies</strong> English every evening.</li>
+        <li><span class="dot pos"></span>He <strong>goes</strong> to the gym on Mondays.</li>
+        <li><span class="dot pos"></span>My cat <strong>has</strong> green eyes.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SLIDE 4 — EXAMPLES ═══════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="card">
+      <span class="eyebrow">Lesson 4 — Examples</span>
+      <div class="slide-title">Positive, Negative, Question</div>
+      <div class="slide-subtitle">See how the same idea changes form.</div>
+      <ul class="sentence-list">
+        <li><span class="dot pos"></span>✅ <strong>She works</strong> at a hospital.</li>
+        <li><span class="dot neg"></span>❌ <strong>She doesn't work</strong> at a school.</li>
+        <li><span class="dot q"></span>❓ <strong>Does she work</strong> at a hospital?</li>
+      </ul>
+      <div class="divider"></div>
+      <ul class="sentence-list">
+        <li><span class="dot pos"></span>✅ <strong>They play</strong> football on Saturdays.</li>
+        <li><span class="dot neg"></span>❌ <strong>They don't play</strong> basketball.</li>
+        <li><span class="dot q"></span>❓ <strong>Do they play</strong> football?</li>
+      </ul>
+      <div class="divider"></div>
+      <ul class="sentence-list">
+        <li><span class="dot pos"></span>✅ <strong>I wake up</strong> at 7 every morning.</li>
+        <li><span class="dot neg"></span>❌ <strong>I don't wake up</strong> at 5.</li>
+        <li><span class="dot q"></span>❓ <strong>Do you wake up</strong> early?</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SLIDE 5 — QUIZ ═══════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="card">
+      <span class="eyebrow">Activity 1 — Quiz</span>
+      <div class="slide-title">Choose the Correct Answer</div>
+      <div class="slide-subtitle">Click an option. You get one attempt per question.</div>
+
+      <div id="quiz-container"></div>
+      <div style="margin-top:20px;font-size:14px;color:var(--gray);">
+        Quiz score: <span id="quiz-score-display" style="font-weight:700;color:var(--navy);">0 / 4</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SLIDE 6 — FILL IN ═══════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="card">
+      <span class="eyebrow">Activity 2 — Fill in the Blanks</span>
+      <div class="slide-title">Complete the Sentences</div>
+      <div class="slide-subtitle">Type the correct form of the verb in brackets.</div>
+      <div class="fill-row" id="fill-container"></div>
+      <div>
+        <button class="action-btn primary" onclick="checkFill()">Check answers</button>
+        <button class="action-btn secondary" onclick="resetFill()">Reset</button>
+      </div>
+      <div class="feedback-box" id="fill-feedback"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SLIDE 7 — WORD ORDER ═══════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="card">
+      <span class="eyebrow">Activity 3 — Word Order</span>
+      <div class="slide-title">Build the Sentence</div>
+      <div class="slide-subtitle">Click the words in the correct order to form the sentence.</div>
+      <div id="sort-container"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SLIDE 8 — SUMMARY ═══════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="summary-card">
+      <div style="font-size:56px;margin-bottom:12px;">🏆</div>
+      <h2>Great work!</h2>
+      <p>You finished the Present Simple lesson.</p>
+      <div class="score-circle">
+        <div class="num" id="final-score">0</div>
+        <div class="lbl">points</div>
+      </div>
+      <div class="recap-grid">
+        <div class="recap-pill"><strong>✅ Use it for:</strong>habits, facts, schedules, routines</div>
+        <div class="recap-pill"><strong>➕ Positive:</strong>Subject + verb (+s/es for he/she/it)</div>
+        <div class="recap-pill"><strong>➖ Negative:</strong>don't / doesn't + base verb</div>
+        <div class="recap-pill"><strong>❓ Question:</strong>Do / Does + subject + base verb?</div>
+        <div class="recap-pill"><strong>📌 Key words:</strong>always, usually, often, every day, never</div>
+        <div class="recap-pill"><strong>⚠️ Watch out:</strong>he/she/it needs -s, -es, or -ies</div>
+      </div>
+      <button class="action-btn primary" style="margin-top:28px;" onclick="restartLesson()">🔁 Start Again</button>
+    </div>
+  </div>
+
+</div><!-- /stage -->
+
+<div id="nav">
+  <button class="nav-btn prev" id="btn-prev" onclick="changeSlide(-1)" disabled>← Back</button>
+  <button class="nav-btn next" id="btn-next" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────
+const TOTAL = 9;
+let current = 0;
+let quizScore = 0;
+let fillScore = 0;
+let sortScore = 0;
+let quizAnswered = [false, false, false, false];
+
+// ─── QUIZ DATA ────────────────────────────────────────────────
+const quizData = [
+  {
+    q: "She _____ to school every day.",
+    options: ["go", "goes", "going", "is go"],
+    correct: 1,
+    exp: "✅ We use <strong>goes</strong> because the subject is she (he/she/it → +s)."
+  },
+  {
+    q: "They _____ not like coffee.",
+    options: ["is", "does", "do", "are"],
+    correct: 2,
+    exp: "✅ We use <strong>do</strong> not because the subject is they (plural)."
+  },
+  {
+    q: "_____ he speak Spanish?",
+    options: ["Do", "Is", "Does", "Are"],
+    correct: 2,
+    exp: "✅ <strong>Does</strong> is used for questions with he/she/it."
+  },
+  {
+    q: "The sun _____ in the west.",
+    options: ["set", "sets", "setting", "does set"],
+    correct: 1,
+    exp: "✅ <strong>Sets</strong> — this is a general fact. The sun (it) → +s."
+  }
+];
+
+// ─── FILL-IN DATA ─────────────────────────────────────────────
+const fillData = [
+  { before: "My brother", verb: "study", after: "medicine at university.", answer: "studies", hint: "(study)" },
+  { before: "I", verb: "not/watch", after: "TV in the mornings.", answer: "don't watch", hint: "(not/watch)" },
+  { before: "", verb: "Do/Does", after: "your sister play the piano?", answer: "Does", hint: "(Do/Does)" },
+  { before: "We", verb: "have", after: "English class on Fridays.", answer: "have", hint: "(have)" },
+  { before: "The train", verb: "leave", after: "at 6:30 every morning.", answer: "leaves", hint: "(leave)" },
+];
+
+// ─── SORT DATA ─────────────────────────────────────────────────
+const sortData = [
+  { words: ["always", "He", "breakfast", "eats", "at", "7"], answer: ["He", "always", "eats", "breakfast", "at", "7"] },
+  { words: ["they", "on", "Do", "work", "Sundays", "?"], answer: ["Do", "they", "work", "on", "Sundays", "?"] },
+  { words: ["go", "not", "cinema", "I", "often", "do", "to", "the"], answer: ["I", "do", "not", "often", "go", "to", "the", "cinema"] },
+];
+let sortCurrent = 0;
+let sortSlots = [];
+let sortPool = [];
+
+// ─── NAVIGATION ───────────────────────────────────────────────
+function changeSlide(dir) {
+  document.getElementById('slide-' + current).classList.remove('active');
+  current += dir;
+  current = Math.max(0, Math.min(TOTAL - 1, current));
+  document.getElementById('slide-' + current).classList.add('active');
+  updateNav();
+  if (current === 8) updateSummary();
+  if (current === 7 && sortCurrent === 0) renderSort(0);
+  window.scrollTo(0, 0);
+}
+
+function updateNav() {
+  document.getElementById('btn-prev').disabled = current === 0;
+  document.getElementById('btn-next').disabled = current === TOTAL - 1;
+  document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + TOTAL;
+  document.getElementById('progress-fill').style.width = ((current / (TOTAL - 1)) * 100) + '%';
+}
+
+function restartLesson() {
+  quizScore = 0; fillScore = 0; sortScore = 0;
+  quizAnswered = [false,false,false,false];
+  sortCurrent = 0; sortPool = []; sortSlots = [];
+  buildQuiz(); buildFill(); resetFill();
+  document.getElementById('slide-' + current).classList.remove('active');
+  current = 0;
+  document.getElementById('slide-0').classList.add('active');
+  updateNav();
+}
+
+// ─── QUIZ ─────────────────────────────────────────────────────
+function buildQuiz() {
+  const c = document.getElementById('quiz-container');
+  c.innerHTML = '';
+  quizData.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'margin-bottom:28px;';
+    div.innerHTML = `
+      <div class="quiz-q">${qi+1}. ${q.q}</div>
+      <div class="options" id="opts-${qi}">
+        ${q.options.map((o,oi) => `<button class="opt-btn" onclick="answerQuiz(${qi},${oi})" id="opt-${qi}-${oi}">${o}</button>`).join('')}
+      </div>
+      <div class="feedback-box" id="qfb-${qi}"></div>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function answerQuiz(qi, oi) {
+  if (quizAnswered[qi]) return;
+  quizAnswered[qi] = true;
+  const q = quizData[qi];
+  const fb = document.getElementById('qfb-' + qi);
+  document.querySelectorAll(`#opts-${qi} .opt-btn`).forEach(b => b.disabled = true);
+  if (oi === q.correct) {
+    document.getElementById(`opt-${qi}-${oi}`).classList.add('correct');
+    fb.innerHTML = q.exp;
+    fb.className = 'feedback-box show ok';
+    quizScore++;
+  } else {
+    document.getElementById(`opt-${qi}-${oi}`).classList.add('wrong');
+    document.getElementById(`opt-${qi}-${q.correct}`).classList.add('correct');
+    fb.innerHTML = '❌ Not quite. ' + q.exp;
+    fb.className = 'feedback-box show err';
+  }
+  document.getElementById('quiz-score-display').textContent = quizScore + ' / 4';
+}
+
+// ─── FILL IN ──────────────────────────────────────────────────
+function buildFill() {
+  const c = document.getElementById('fill-container');
+  c.innerHTML = '';
+  fillData.forEach((f, i) => {
+    const div = document.createElement('div');
+    div.className = 'fill-item';
+    div.innerHTML = `
+      ${f.before ? `<span>${f.before}</span>` : ''}
+      <input type="text" id="fill-${i}" placeholder="?" autocomplete="off" autocorrect="off" spellcheck="false">
+      <span class="fill-hint">${f.hint}</span>
+      <span>${f.after}</span>
+    `;
+    c.appendChild(div);
+  });
+}
+
+function checkFill() {
+  fillScore = 0;
+  fillData.forEach((f, i) => {
+    const inp = document.getElementById('fill-' + i);
+    const val = inp.value.trim().toLowerCase();
+    inp.classList.remove('correct','wrong');
+    if (val === f.answer.toLowerCase()) {
+      inp.classList.add('correct');
+      fillScore++;
+    } else {
+      inp.classList.add('wrong');
+    }
+  });
+  const fb = document.getElementById('fill-feedback');
+  fb.className = 'feedback-box show ' + (fillScore === fillData.length ? 'ok' : 'err');
+  fb.innerHTML = fillScore === fillData.length
+    ? `🎉 Perfect! All ${fillData.length} correct!`
+    : `You got ${fillScore} out of ${fillData.length}. Incorrect boxes are highlighted — try again!`;
+}
+
+function resetFill() {
+  fillData.forEach((f, i) => {
+    const inp = document.getElementById('fill-' + i);
+    if (inp) { inp.value = ''; inp.classList.remove('correct','wrong'); }
+  });
+  const fb = document.getElementById('fill-feedback');
+  if (fb) { fb.className = 'feedback-box'; fb.innerHTML = ''; }
+  fillScore = 0;
+}
+
+// ─── WORD ORDER ───────────────────────────────────────────────
+function renderSort(idx) {
+  const c = document.getElementById('sort-container');
+  if (idx >= sortData.length) {
+    c.innerHTML = `<div class="info-box green" style="margin-top:16px;font-size:16px;">🎉 All sentences complete! You earned <strong>${sortScore} / ${sortData.length}</strong> points on this activity.</div>`;
+    return;
+  }
+  const s = sortData[idx];
+  sortPool = [...s.words].sort(() => Math.random() - 0.5);
+  sortSlots = [];
+
+  c.innerHTML = `
+    <div style="font-size:14px;color:var(--gray);margin-bottom:12px;">Sentence ${idx+1} of ${sortData.length}</div>
+    <p style="font-size:15px;color:var(--navy);margin-bottom:14px;font-weight:600;">Put the words in the correct order:</p>
+    <div style="font-size:13px;color:var(--gray);margin-bottom:6px;">Word bank — click to add:</div>
+    <div class="words-pool" id="pool">
+      ${sortPool.map((w,i) => `<span class="word-chip" id="wc-${i}" onclick="addWord('${w}',${i})">${w}</span>`).join('')}
+    </div>
+    <div style="font-size:13px;color:var(--gray);margin:12px 0 6px;">Your sentence — click a word to remove it:</div>
+    <div class="sentence-slots" id="slots"></div>
+    <div>
+      <button class="action-btn primary" onclick="checkSort(${idx})" style="margin-top:14px;">Check</button>
+      <button class="action-btn secondary" onclick="resetSort(${idx})" style="margin-top:14px;">Reset</button>
+    </div>
+    <div class="feedback-box" id="sort-fb"></div>
+  `;
+}
+
+function addWord(word, chipIdx) {
+  const chip = document.getElementById('wc-' + chipIdx);
+  if (chip.classList.contains('used')) return;
+  chip.classList.add('used');
+  sortSlots.push({ word, chipIdx });
+  renderSlots();
+}
+
+function removeWord(slotIdx) {
+  const removed = sortSlots.splice(slotIdx, 1)[0];
+  const chip = document.getElementById('wc-' + removed.chipIdx);
+  if (chip) chip.classList.remove('used');
+  renderSlots();
+}
+
+function renderSlots() {
+  const container = document.getElementById('slots');
+  container.innerHTML = sortSlots.length === 0
+    ? '<span style="color:var(--gray);font-size:14px;">Click words above to build the sentence...</span>'
+    : sortSlots.map((s,i) => `<span class="slot-chip" onclick="removeWord(${i})">${s.word}</span>`).join('');
+}
+
+function checkSort(idx) {
+  const fb = document.getElementById('sort-fb');
+  const userSentence = sortSlots.map(s => s.word).join(' ');
+  const correct = sortData[idx].answer.join(' ');
+  if (userSentence.toLowerCase() === correct.toLowerCase()) {
+    fb.className = 'feedback-box show ok';
+    fb.innerHTML = '✅ Correct! Well done!';
+    sortScore++;
+    sortCurrent++;
+    setTimeout(() => renderSort(sortCurrent), 1200);
+  } else {
+    fb.className = 'feedback-box show err';
+    fb.innerHTML = `❌ Not quite. Try again! <br><span style="font-size:13px;margin-top:4px;display:block;">Hint: Check the position of the verb.</span>`;
+  }
+}
+
+function resetSort(idx) {
+  sortSlots = [];
+  sortPool.forEach((w, i) => {
+    const chip = document.getElementById('wc-' + i);
+    if (chip) chip.classList.remove('used');
+  });
+  renderSlots();
+  const fb = document.getElementById('sort-fb');
+  if (fb) { fb.className = 'feedback-box'; fb.innerHTML = ''; }
+}
+
+// ─── SUMMARY ──────────────────────────────────────────────────
+function updateSummary() {
+  const total = quizScore + fillScore + sortScore;
+  document.getElementById('final-score').textContent = total;
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+buildQuiz();
+buildFill();
+updateNav();
+</script>
+</body>
+</html>
